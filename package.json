@@ -1,0 +1,32 @@
+{
+  "name": "quickpolls",
+  "version": "1.0.0",
+  "description": "An online polling platform",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khalilv/quickpolls.git"
+  },
+  "author": "Khalil Virji",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khalilv/quickpolls/issues"
+  },
+  "homepage": "https://github.com/khalilv/quickpolls#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.5.0",
+    "http-auth": "^4.1.2",
+    "mongoose": "^5.9.19",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
