@@ -1,35 +1,24 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-    <meta charset='utf-8'>
-    <title>Quickpolls</title>
-    <style>
-        body {
-            background-color: #565656;
-        }
-    </style>
-</head>
-
-<body>
-    <h1><%= title %></h1>
-    <form method="POST">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br><br>
-        <input type="submit" value="Submit">
-    </form>
-
-
-
-
-    <script>
-
-    </script>
-</body>
-
-</html>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i> Login</h1>
+            <%- include('./partials/messages') %>
+            <form action="/users/login" method="POST">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control"
+                        placeholder="Enter Password" />
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block">Login</button>
+            </form>
+            <p class="lead mt-4">
+                <center>No Account?</center>
+            </p>
+            <a href="/users/register" class="btn btn-primary btn-block">Register</a>
+        </div>
+    </div>
+</div>
