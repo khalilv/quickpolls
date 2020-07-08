@@ -10,4 +10,11 @@ router.get('/dashboard',ensureAuthenticated, (req, res) => res.render('dashboard
     user : req.user
 })); 
 
+router.get('/leaderboards',ensureAuthenticated, (req, res) => res.render('leaderboards', {
+    user : req.user
+})); 
+
+router.get('/contact',ensureAuthenticated, (req, res) => res.render('contact', {
+    user : req.user
+})); 
 module.exports = router; 
