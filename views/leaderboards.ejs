@@ -23,7 +23,39 @@
     </div>
 </nav>
 
-<h1 class="mt-4">Leaderboard</h1>
-<p class="lead mb-3">Welcome <%= user.name %></p>
-<p class="lead mb-3">You have <%= user.points %> points</p>
-<a href="/users/logout" class="btn btn-secondary">Logout</a>
+<div class="container" style="text-align: center;">
+    <h1 class="mt-4">Leaderboards</h1>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Points</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(() => {
+
+        const request = new XMLHttpRequest();
+        const tbody = document.getElementById('tbody');
+        request.open("GET", "/allUsers", true);
+        request.responseType = "json";
+        request.onloadend = function () {
+            if (request.response.success) {
+                for (let i = 0; i < request.response.users.length; i++) {
+                    let row = tbody.insertRow();
+                    row.insertCell(0).innerHTML = i + 1;
+                    row.insertCell(1).innerHTML = request.response.users[i].name;
+                    row.insertCell(2).innerHTML = request.response.users[i].points ? request.response.users[i].points : 0;
+                }
+            }
+        }
+        request.send();
+    });
+
+</script>
