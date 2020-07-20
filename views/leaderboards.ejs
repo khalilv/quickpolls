@@ -1,3 +1,6 @@
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">Quickpolls</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
@@ -25,8 +28,8 @@
 
 <div class="container" style="text-align: center;">
     <h1 class="mt-4">Leaderboards</h1>
-    <br />
-    <table class="table">
+    <br/>
+    <table id="leaderboardtb" class="table table-hover table-light">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -34,7 +37,7 @@
                 <th scope="col">Points</th>
             </tr>
         </thead>
-        <tbody id="tbody">
+        <tbody id="lbtbody">
         </tbody>
     </table>
 </div>
@@ -42,17 +45,27 @@
     $(document).ready(() => {
 
         const request = new XMLHttpRequest();
-        const tbody = document.getElementById('tbody');
+        const lbtbody = document.getElementById('lbtbody');
         request.open("GET", "/allUsers", true);
         request.responseType = "json";
         request.onloadend = function () {
             if (request.response.success) {
+                request.response.users.sort((a, b) => (a.points ? a.points : 0) - (b.points ? b.points : 0))
                 for (let i = 0; i < request.response.users.length; i++) {
-                    let row = tbody.insertRow();
+                    let user = request.response.users[i];
+                    let row = lbtbody.insertRow();
                     row.insertCell(0).innerHTML = i + 1;
-                    row.insertCell(1).innerHTML = request.response.users[i].name;
-                    row.insertCell(2).innerHTML = request.response.users[i].points ? request.response.users[i].points : 0;
+                    row.insertCell(1).innerHTML = user.name;
+                    row.insertCell(2).innerHTML = user.points ? user.points : 0;
+                    if (user.name == "<%= user.name %>") {
+                        row.style.background = "rgba(52,152,219,0.24)"
+                    }
                 }
+                $('#leaderboardtb').DataTable({
+                    "bLengthChange": false,
+                    "bInfo" : false,
+                });
+                $('.dataTables_length').addClass('bs-select');
             }
         }
         request.send();

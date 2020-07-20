@@ -31,6 +31,7 @@ router.get('/allUsers', ensureAuthenticated, (req, res) => {
 });
 
 
+
 router.get('/contact', ensureAuthenticated, (req, res) => res.render('contact', {
     user: req.user
 }));

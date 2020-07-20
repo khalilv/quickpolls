@@ -23,7 +23,77 @@
     </div>
 </nav>
 
-<h1 class="mt-4">Dashboard</h1>
-<p class="lead mb-3">Welcome <%= user.name %></p>
-<p class="lead mb-3">You have <%= user.points %> points</p>
-<a href="/users/logout" class="btn btn-secondary">Logout</a>
+<div class="container" style="text-align: center;">
+    <h1 class="mt-4">Welcome <%= user.name %></h1>
+</div>
+<br/>
+<br/>
+<div class="container" style="text-align: center;">
+    <button onclick="test()" id='loadpoll' class="btn-lg btn-primary">Take weekly poll</button>
+</div>
+
+<br/>
+<br/>
+
+<div class="container rounded bordered" id='polls' style="display: none;">
+</div>
+
+<div class="container" id='thankyou' style="display: none; text-align: center;">
+    <h3>Thank you. Your response has been recorded (not really)</h3>
+</div>
+
+
+
+<script>
+    function test(){
+        $('#loadpoll').hide(); 
+        $('#polls').show(); 
+        loadpolldiv('Question 1', 'YES', 'NO', 1, false, true);
+        loadpolldiv('Question 2', 'YES', 'NO', 2, false, false);
+        loadpolldiv('Question 3', 'YES', 'NO', 3, true, false);
+    }
+
+    const polls = document.getElementById('polls'); 
+    function loadpolldiv(name, op1, op2, number, islast, isFirst){
+        let div = document.createElement('div'); 
+        div.setAttribute('class', 'container pollquestion'); 
+        div.setAttribute('style', 'text-align: center; margin-top: 20px; margin-bottom: 20px'); 
+        if(!isFirst){
+            div.style.display = 'none'; 
+        }
+        div.id = number.toString(); 
+        title = document.createElement('h3'); 
+        title.innerHTML = name; 
+        div.appendChild(title); 
+        div.appendChild(document.createElement('br')); 
+        let btn1 = document.createElement('btn'); 
+        btn1.setAttribute('class', 'btn btn-lg btn-success'); 
+        btn1.innerHTML = op1;
+        let btn2 = document.createElement('btn'); 
+        btn2.setAttribute('class', 'btn btn-lg btn-danger'); 
+        btn2.innerHTML = op2;  
+        if(!islast){
+            btn1.onclick = function(){
+                $(".pollquestion").hide();
+                document.getElementById((number+1).toString()).style.display='block';
+            }
+            btn2.onclick = function(){
+                $(".pollquestion").hide();
+                document.getElementById((number+1).toString()).style.display='block';
+            }
+        }else{
+            btn1.onclick = function(){
+                $("#polls").hide();
+                $('#thankyou').show(); 
+            }
+            btn2.onclick = function(){
+                $("#polls").hide();
+                $('#thankyou').show(); 
+            }
+        }
+        div.appendChild(btn1);  
+        div.appendChild(btn2); 
+        polls.appendChild(div);         
+    }
+
+</script>
