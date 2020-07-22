@@ -13,11 +13,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/leaderboards">Leaderboards</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/contact">Contact</a>
             </li>
             <% if (user.isAdmin) { %>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/admin">Admin</a>
                 </li>
             <% } %>
@@ -28,6 +28,6 @@
     </div>
 </nav>
 
-<h1 class="mt-4">Contact Us</h1>
-<p class="lead mb-3">Welcome <%= user.name %></p>
-<p class="lead mb-3">Let us know if you have any questions!</p>
+<h1 class="mt-4">Admin Page</h1>
+<p class="lead mb-3">Welcome Admin <%= user.name %></p>
+<p class="lead mb-3">Put all admin stuff here</p>

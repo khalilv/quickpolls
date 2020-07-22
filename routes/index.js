@@ -35,4 +35,8 @@ router.get('/allUsers', ensureAuthenticated, (req, res) => {
 router.get('/contact', ensureAuthenticated, (req, res) => res.render('contact', {
     user: req.user
 }));
+
+router.get('/admin', ensureAuthenticated, (req, res) => res.render('admin', {
+    user: req.user
+}));
 module.exports = router; 
