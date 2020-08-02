@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const queries = require('./queries');
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 const User = require('../models/User');
+const Poll = require('../models/Poll');
 
 //welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
@@ -39,4 +40,17 @@ router.get('/contact', ensureAuthenticated, (req, res) => res.render('contact', 
 router.get('/admin', ensureAuthenticated, (req, res) => res.render('admin', {
     user: req.user
 }));
+
+router.post('/admin/newpoll', ensureAuthenticated, (req, res) => {
+    const questions = req.body;
+    console.log(req.body); 
+    const new_poll = new Poll({
+        questions
+    });
+    new_poll.save().then(poll => {
+        res.json({ success: true, data: poll });
+    }).catch(err => {
+        res.json({ success: false, error: err });
+    });
+});
 module.exports = router; 

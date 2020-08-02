@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash'); 
 const session = require('express-session'); 
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
 //passport config
 require('./config/passport')(passport); 
@@ -23,8 +24,8 @@ app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
 //bodyparser
-app.use(express.urlencoded({extended : false})); 
-
+app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 //express session 
 app.use(session ({
     secret : 'quickpollssecret',

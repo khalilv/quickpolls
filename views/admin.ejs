@@ -28,6 +28,35 @@
     </div>
 </nav>
 
-<h1 class="mt-4">Admin Page</h1>
-<p class="lead mb-3">Welcome Admin <%= user.name %></p>
-<p class="lead mb-3">Put all admin stuff here</p>
+<div class="container">
+	<h3 class="mt-4" style="text-align: center;"><%= user.name %>'s Admin Page</h3>
+	<br/>
+	<div class="form-group" style="max-width: 60%;">
+		<label for="pollinput">Create Poll</label>
+		<textarea class="form-control" id="pollinput" rows="10"></textarea>
+		<small id="pollhelp" class="form-text text-muted">Each question should be on a newline</small>
+		<btn class="btn btn-success" style="margin: 15px" onclick="submitpoll()">Submit</btn>
+	</div>
+	
+</div>
+
+<script>
+	const polldata = document.getElementById('pollinput');
+	function submitpoll(){
+	
+	    let questions = polldata.value.trim().split('\n');
+	    var http = new XMLHttpRequest();
+		console.log(questions); 
+	    http.open('POST', '/admin/newpoll', true);
+
+	    //Send the proper header information along with the request
+	    http.setRequestHeader('Content-type', 'application/json');
+
+        http.onloadend = function () {
+		    console.log(http.response); 
+		}
+	    
+	    http.send(JSON.stringify(questions));
+
+	}
+</script>
