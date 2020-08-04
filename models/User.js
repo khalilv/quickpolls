@@ -24,6 +24,14 @@ const UserSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    takenActivePoll : {
+        type: Boolean, 
+        default : false
+    }, 
+    answers : {
+        type : Object, 
+        required : false, 
     }
 });
 

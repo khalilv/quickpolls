@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+const mongoose = require('mongoose'); 
 const PollSchema = new mongoose.Schema({
     date: {
         type: Date,
@@ -8,6 +7,18 @@ const PollSchema = new mongoose.Schema({
     questions: {
         type: [String],
         required: true
+    }, 
+    name : {
+        type : String, 
+        required : true
+    },
+    isActive : {
+        type : Boolean, 
+        default : false
+    },
+    answers : {
+        type : [Boolean], 
+        required : false
     }
 });
 

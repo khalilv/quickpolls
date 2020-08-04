@@ -34,7 +34,7 @@
 <br/>
 <br/>
 <div class="container" style="text-align: center;">
-    <button onclick="test()" id='loadpoll' class="btn-lg btn-primary">Take weekly poll</button>
+    <button onclick="get_active_poll()" id='loadpoll' class="btn-lg btn-primary">Take weekly poll</button>
 </div>
 
 <br/>
@@ -50,12 +50,30 @@
 
 
 <script>
-    function test(){
-        $('#loadpoll').hide(); 
-        $('#polls').show(); 
-        loadpolldiv('Question 1', 'YES', 'NO', 1, false, true);
-        loadpolldiv('Question 2', 'YES', 'NO', 2, false, false);
-        loadpolldiv('Question 3', 'YES', 'NO', 3, true, false);
+
+    function get_active_poll(){
+        const request = new XMLHttpRequest(); 
+        request.open( "GET", "/activePoll", true); 
+        request.responseType = 'json'; 
+        request.onloadend = function(){
+            if (request.response.success){
+                if(request.response.poll){
+                    $('#loadpoll').hide(); 
+                    $('#polls').show(); 
+                    let poll = request.response.poll; 
+                    for(let i = 0; i < poll.questions.length; i++){
+                        if(i == poll.questions.length-1){
+                            loadpolldiv(poll.questions[i], 'YES', 'NO', i+1, true, false);
+                        }else if (i == 0){
+                            loadpolldiv(poll.questions[i], 'YES', 'NO', i+1, false, true);
+                        }else{
+                            loadpolldiv(poll.questions[i], 'YES', 'NO', i+1, false, false);
+                        }
+                    }
+                }
+            } 
+        }
+        request.send();
     }
 
     const polls = document.getElementById('polls'); 

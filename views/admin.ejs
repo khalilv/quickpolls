@@ -17,9 +17,9 @@
                 <a class="nav-link" href="/contact">Contact</a>
             </li>
             <% if (user.isAdmin) { %>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/admin">Admin</a>
-                </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/admin">Admin</a>
+            </li>
             <% } %>
             <li class="nav-item">
                 <a href="/users/logout" class="nav-link">Logout</a>
@@ -29,34 +29,42 @@
 </nav>
 
 <div class="container">
-	<h3 class="mt-4" style="text-align: center;"><%= user.name %>'s Admin Page</h3>
-	<br/>
-	<div class="form-group" style="max-width: 60%;">
-		<label for="pollinput">Create Poll</label>
-		<textarea class="form-control" id="pollinput" rows="10"></textarea>
-		<small id="pollhelp" class="form-text text-muted">Each question should be on a newline</small>
-		<btn class="btn btn-success" style="margin: 15px" onclick="submitpoll()">Submit</btn>
-	</div>
-	
+    <h3 class="mt-4" style="text-align: center;"><%= user.name %>'s Admin Page</h3>
+    <br />
+    <form action="/admin/newpoll" method="POST">
+        <fieldset>
+            <legend>Create Poll</legend>
+            <div class="form-group">
+                <label for="pollname">Poll Name</label>
+                <input type="text" class="form-control" id="pollname" placeholder="Enter poll name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="pollinput">Questions</label>
+                <textarea class="form-control" id="pollinput" rows="10" name="questions"></textarea>
+                <small id="pollhelp" class="form-text text-muted">Each question should be on a new line</small>
+            </div>
+            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+        </fieldset>
+    </form>
 </div>
 
 <script>
-	const polldata = document.getElementById('pollinput');
-	function submitpoll(){
-	
-	    let questions = polldata.value.trim().split('\n');
-	    var http = new XMLHttpRequest();
-		console.log(questions); 
-	    http.open('POST', '/admin/newpoll', true);
+    const polldata = document.getElementById('pollinput');
+    function submitpoll() {
 
-	    //Send the proper header information along with the request
-	    http.setRequestHeader('Content-type', 'application/json');
+        let questions = polldata.value.trim().split('\n');
+        var http = new XMLHttpRequest();
+        console.log(questions);
+        http.open('POST', '/admin/newpoll', true);
+
+        //Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/json');
 
         http.onloadend = function () {
-		    console.log(http.response); 
-		}
-	    
-	    http.send(JSON.stringify(questions));
+            console.log(http.response);
+        }
 
-	}
+        http.send(JSON.stringify(questions));
+
+    }
 </script>
