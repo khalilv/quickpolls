@@ -1,3 +1,6 @@
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="#">Quickpolls</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
@@ -46,6 +49,21 @@
             <button type="submit" class="btn btn-sm btn-success">Submit</button>
         </fieldset>
     </form>
+    <br/>
+    <legend>Activate Poll</legend>
+    <table id="pollstable" class="table table-hover table-light">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Date created</th>
+                <th scope="col">Activate</th>
+            </tr>
+        </thead>
+        <tbody id="pollrows">
+        </tbody>
+    </table>
+    <br/>
+    <button type="button" onclick="activate_poll()" class="btn btn-sm btn-success">Submit</button>
 </div>
 
 <script>
@@ -54,17 +72,58 @@
 
         let questions = polldata.value.trim().split('\n');
         var http = new XMLHttpRequest();
-        console.log(questions);
         http.open('POST', '/admin/newpoll', true);
-
         //Send the proper header information along with the request
         http.setRequestHeader('Content-type', 'application/json');
-
-        http.onloadend = function () {
-            console.log(http.response);
-        }
-
         http.send(JSON.stringify(questions));
-
     }
+
+    const pollrows = document.getElementById('pollrows');
+    $(document).ready(() => {
+        const request = new XMLHttpRequest();
+        request.open("GET", "/admin/listPolls", true);
+        request.responseType = "json";
+        request.onloadend = function () {
+            if (request.response.success) {
+                for (let i = 0; i < request.response.polls.length; i++) {
+                    let poll = request.response.polls[i];
+                    let row = pollrows.insertRow();
+                    row.insertCell(0).innerHTML = poll.name;
+                    row.insertCell(1).innerHTML = new Date(poll.date);
+                    if (poll.isActive) {
+                        row.insertCell(2).innerHTML = '<input type="radio" checked name="active" value="'+poll._id+'"/>';
+                        row.style.background = "rgba(52,152,219,0.24)"
+                    }else{
+                        row.insertCell(2).innerHTML = '<input type="radio"name="active" value="'+poll._id+'"/>';
+                    }
+                }
+                $('#pollstable').DataTable({
+                    "bLengthChange": false,
+                    "bInfo": false,
+                    "paging": false,
+                    "searching" : false
+                });
+                $('.dataTables_length').addClass('bs-select');
+            }
+        }
+        request.send();
+    });
+
+    function activate_poll(){
+        let body = {id: $("input[name='active']:checked").val()};
+        let http = new XMLHttpRequest();
+        http.open('POST', '/admin/activatepoll', true);
+        //Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/json');
+        http.responseType = 'json'; 
+        http.onloadend = function(){
+            if(http.response.success){
+                location.reload(true);
+            }else{
+                console.log(http.response.error); 
+            }
+        }
+        http.send(JSON.stringify(body));
+    }
+
 </script>
