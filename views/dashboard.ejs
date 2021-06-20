@@ -17,9 +17,9 @@
                 <a class="nav-link" href="/contact">Contact</a>
             </li>
             <% if (user.isAdmin) { %>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin">Admin</a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">Admin</a>
+            </li>
             <% } %>
             <li class="nav-item">
                 <a href="/users/logout" class="nav-link">Logout</a>
@@ -31,14 +31,14 @@
 <div class="container" style="text-align: center;">
     <h1 class="mt-4">Welcome <%= user.name %></h1>
 </div>
-<br/>
-<br/>
+<br />
+<br />
 <div class="container" style="text-align: center;">
     <button onclick="get_active_poll()" id='loadpoll' class="btn-lg btn-primary">Take weekly poll</button>
 </div>
 
-<br/>
-<br/>
+<br />
+<br />
 
 <div class="container rounded bordered" id='polls' style="display: none;">
 </div>
@@ -51,72 +51,68 @@
 
 <script>
 
-    function get_active_poll(){
-        const request = new XMLHttpRequest(); 
-        request.open( "GET", "/activePoll", true); 
-        request.responseType = 'json'; 
-        request.onloadend = function(){
-            if (request.response.success){
-                if(request.response.poll){
-                    $('#loadpoll').hide(); 
-                    $('#polls').show(); 
-                    let poll = request.response.poll; 
-                    for(let i = 0; i < poll.questions.length; i++){
-                        if(i == poll.questions.length-1){
-                            loadpolldiv(poll.questions[i], 'YES', 'NO', i+1, true, false);
-                        }else if (i == 0){
-                            loadpolldiv(poll.questions[i], 'YES', 'NO', i+1, false, true);
-                        }else{
-                            loadpolldiv(poll.questions[i], 'YES', 'NO', i+1, false, false);
-                        }
+    function get_active_poll() {
+        const request = new XMLHttpRequest();
+        request.open("GET", "/activePoll", true);
+        request.responseType = 'json';
+        request.onloadend = function () {
+            if (request.response.success) {
+                if (request.response.poll) {
+                    $('#loadpoll').hide();
+                    $('#polls').show();
+                    let poll = request.response.poll;
+                    for (let i = 0; i < poll.questions.length; i++) {
+                        let islast = (i == poll.questions.length - 1);
+                        let isfirst = (i == 0);
+                        loadpolldiv(poll.questions[i], 'YES', 'NO', i + 1, islast, isfirst);
                     }
                 }
-            } 
+            }
         }
         request.send();
     }
 
-    const polls = document.getElementById('polls'); 
-    function loadpolldiv(name, op1, op2, number, islast, isFirst){
-        let div = document.createElement('div'); 
-        div.setAttribute('class', 'container pollquestion'); 
-        div.setAttribute('style', 'text-align: center; margin-top: 20px; margin-bottom: 20px'); 
-        if(!isFirst){
-            div.style.display = 'none'; 
+    const polls = document.getElementById('polls');
+    function loadpolldiv(name, op1, op2, number, islast, isFirst) {
+        let div = document.createElement('div');
+        div.setAttribute('class', 'container pollquestion');
+        div.setAttribute('style', 'text-align: center; margin-top: 20px; margin-bottom: 20px');
+        if (!isFirst) {
+            div.style.display = 'none';
         }
-        div.id = number.toString(); 
-        title = document.createElement('h3'); 
-        title.innerHTML = name; 
-        div.appendChild(title); 
-        div.appendChild(document.createElement('br')); 
-        let btn1 = document.createElement('btn'); 
-        btn1.setAttribute('class', 'btn btn-lg btn-success'); 
+        div.id = number.toString();
+        title = document.createElement('h3');
+        title.innerHTML = name;
+        div.appendChild(title);
+        div.appendChild(document.createElement('br'));
+        let btn1 = document.createElement('btn');
+        btn1.setAttribute('class', 'btn btn-lg btn-success');
         btn1.innerHTML = op1;
-        let btn2 = document.createElement('btn'); 
-        btn2.setAttribute('class', 'btn btn-lg btn-danger'); 
-        btn2.innerHTML = op2;  
-        if(!islast){
-            btn1.onclick = function(){
+        let btn2 = document.createElement('btn');
+        btn2.setAttribute('class', 'btn btn-lg btn-danger');
+        btn2.innerHTML = op2;
+        if (!islast) {
+            btn1.onclick = function () {
                 $(".pollquestion").hide();
-                document.getElementById((number+1).toString()).style.display='block';
+                document.getElementById((number + 1).toString()).style.display = 'block';
             }
-            btn2.onclick = function(){
+            btn2.onclick = function () {
                 $(".pollquestion").hide();
-                document.getElementById((number+1).toString()).style.display='block';
+                document.getElementById((number + 1).toString()).style.display = 'block';
             }
-        }else{
-            btn1.onclick = function(){
+        } else {
+            btn1.onclick = function () {
                 $("#polls").hide();
-                $('#thankyou').show(); 
+                $('#thankyou').show();
             }
-            btn2.onclick = function(){
+            btn2.onclick = function () {
                 $("#polls").hide();
-                $('#thankyou').show(); 
+                $('#thankyou').show();
             }
         }
-        div.appendChild(btn1);  
-        div.appendChild(btn2); 
-        polls.appendChild(div);         
+        div.appendChild(btn1);
+        div.appendChild(btn2);
+        polls.appendChild(div);
     }
 
 </script>
